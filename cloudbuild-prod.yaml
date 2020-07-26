@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/devops-training-birkan/cloudrun-cicd-test:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/birkantest-284516/github.com/squareroot1/birkantest:$COMMIT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/birkantest-284516/github.com/squareroot1/birkantest:$COMMIT_SHA']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['beta', 'run', 'deploy', 'you-are-awesome-prod', '--region=europe-west4', '--platform=managed', '--port=3000', '--allow-unauthenticated', '--image=gcr.io/birkantest-284516/github.com/squareroot1/birkantest:$COMMIT_SHA']
